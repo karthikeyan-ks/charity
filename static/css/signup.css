@@ -1,0 +1,105 @@
+body {
+    background-color: #f8f9fa;
+    width: 100vw;
+}
+.signup-container {
+    max-width: 600px;
+    margin: 50px auto;
+}
+.card {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.stepper::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 96%;
+    height: 2px;  /* Thinner line */
+    background-color: #ddd;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.step {
+    width: 30px;  /* Smaller circle */
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;  /* Smaller text */
+    font-weight: bold;
+    color: white;
+    position: relative;
+    z-index: 1;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.step.active {
+    background-color: #007bff;
+    transform: scale(1.05);
+}
+
+.step.completed {
+    background-color: #28a745;
+}
+
+.step.completed::after {
+    content: "✔";
+    font-size: 14px;
+    color: white;
+    position: absolute;
+}
+
+.step-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;  /* Even smaller */
+    font-weight: bold;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    color: #6c757d;
+}
+/* Reduce label size */
+.col-form-label {
+    font-size: 14px;  /* Decrease text size */
+    font-weight: 500;
+}
+
+/* Reduce input size */
+input, select, textarea {
+    font-size: 12px;  /* Decrease text size */
+    padding: 6px 8px; /* Reduce padding */
+    height: 32px;     /* Adjust height */
+}
+
+/* Reduce form control size */
+.form-control {
+    font-size: 14px;
+    padding: 6px 8px;
+    height: 32px;
+}
+
+/* Reduce button size */
+.btn {
+    font-size: 14px;
+    padding: 6px 12px;
+}
+.container{
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}

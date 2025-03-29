@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup | MySite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <div class="signup-container">
+        <div class="card">
+            <h3 class="text-center mb-4">Sign Up</h3>
+
+            <!-- Stepper Progress -->
+            <div class="stepper">
+                <div class="step active" id="step1-indicator">1</div>
+                <div class="step" id="step2-indicator">2</div>
+                <div class="step" id="step3-indicator">3</div>
+            </div>
+            <div class="step-labels d-flex justify-content-between">
+                <span id="step1-label">Basic Info</span>
+                <span id="step2-label">Details</span>
+                <span id="step3-label">Password</span>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- Step 1: Basic Details -->
+                <div id="step1" class="step-content">
+
+                    <div class="row mb-3">
+                        <label for="username" class="col-sm-4 col-form-label">Username</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="email" class="col-sm-4 col-form-label">Email</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Organization Details -->
+                <div id="step2" class="step-content d-none">
+                    <div class="row mb-3">
+                        <label for="license" class="col-sm-4 col-form-label">License Number</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="license" name="license">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="address" class="col-sm-4 col-form-label">Address</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="address" name="address">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="pin" class="col-sm-4 col-form-label">PIN Code</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="pin" name="pin">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Password -->
+                <div id="step3" class="step-content d-none">
+                    <div class="row mb-3">
+                        <label for="password1" class="col-sm-4 col-form-label">Password</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" id="password1" name="password1" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="password2" class="col-sm-4 col-form-label">Confirm Password</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" id="password2" name="password2" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" id="prev-btn" class="btn btn-secondary" onclick="prevStep()" style="display: none;">Previous</button>
+                    <button type="button" id="next-btn" class="btn btn-primary ms-auto" onclick="nextStep()">Next</button>
+                </div>                
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentStep = 1;
+
+    function updateStepper() {
+        document.querySelectorAll('.step-content').forEach((el, index) => {
+            el.classList.toggle('d-none', index + 1 !== currentStep);
+        });
+
+        document.querySelectorAll('.step').forEach((el, index) => {
+            el.classList.toggle('active', index + 1 === currentStep);
+            el.classList.toggle('completed', index + 1 < currentStep);
+        });
+
+        document.getElementById('prev-btn').style.display = currentStep === 1 ? 'none' : 'block';
+        document.getElementById('next-btn').innerText = currentStep === 3 ? 'Submit' : 'Next';
+    }
+
+    function nextStep() {
+        currentStep++;
+        updateStepper();
+    }
+
+    function prevStep() {
+        currentStep--;
+        updateStepper();
+    }
+
+    document.addEventListener("DOMContentLoaded", updateStepper);
+</script>
+
+</body>
+</html>

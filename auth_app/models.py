@@ -1,0 +1,39 @@
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class UserTypes(models.Model):
+    uid = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.name
+
+class CustomUser(AbstractUser):
+    # Add custom fields
+    user_type = models.ForeignKey(UserTypes,on_delete=models.CASCADE,related_name="user_type",default=3)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.username
+    
+class Donor(models.Model):
+    did = models.AutoField(primary_key=True)
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="user_donor")
+    
+    def __str__(self):
+        return self.user.first_name
+    
+
+class Organization(models.Model):
+    oid = models.AutoField(primary_key=True)
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="user_organization")
+    license = models.CharField(max_length=100)
+    phone = models.CharField(max_length=10)
+    address = models.TextField()
+    pincode = models.CharField(max_length=6)
+    
+    def __str__(self):
+        return self.user.first_name
+    

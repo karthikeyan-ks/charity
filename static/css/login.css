@@ -1,0 +1,86 @@
+/* Light Mode */
+.light-mode {
+    background-color: #FFFFFF; /* Pure White */
+    color: #1E3A5F; /* Deep Navy Blue */
+}
+
+/* Dark Mode */
+.dark-mode {
+    background-color: #0A192F; /* Very Dark Blue */
+    color: #D6E4F0; /* Soft Light Blue */
+}
+
+.dark-mode .card {
+    background-color: #102A43; /* Dark Navy */
+    color: #D6E4F0;
+}
+
+.dark-mode input, .dark-mode .input-group-text {
+    background-color: #2E2E2E;
+    color: #ffffff;
+    border-color: #444;
+}
+.dark-mode input{
+    background-color: white;
+    color: black;
+}
+
+.dark-mode .btn-primary {
+    background-color: #A8C7FF; /* Light Sky Blue */
+    border: none;
+}
+
+.dark-mode .btn-outline-dark {
+    background-color: #102A43; /* Dark Navy */
+    color: #A8C7FF;
+}
+
+/* Login Card */
+.login-container {
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Form Inputs */
+.input-group-text {
+    background-color: #f1f1f1;
+    border-right: none;
+}
+
+.form-control {
+    border-left: none;
+}
+
+/* Button */
+.btn-primary {
+    background-color: #006A71; /* Soft Blue */
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #1E3A5F; /* Deep Navy */
+}
+
+.image {
+    object-fit: cover;
+    height: 100%;
+}
+
+.form-check-label {
+    font-size: small;
+}
+
+.text-center {
+    font-size: small;
+}
+.btn-outline-dark{
+    border: none;
+}
+.light-mode .btn:hover{  
+    background-color: white;
+    color: black;  
+}
+.dark-mode .btn:hover{
+    background-color: #102A43;
+    color: #006A71;
+}
