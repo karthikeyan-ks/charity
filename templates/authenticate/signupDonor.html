@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup | MySite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <div class="signup-container">
+        <div class="card">
+            <h3 class="text-center mb-4">Sign Up</h3>
+
+            <!-- Stepper Progress -->
+            <div class="stepper">
+                <div class="step active" id="step1-indicator">1</div>
+                <div class="step" id="step2-indicator">2</div>
+                <div class="step" id="step3-indicator">3</div>
+                <div class="step" id="step4-indicator">4</div>
+            </div>
+            <div class="step-labels d-flex justify-content-between">
+                <span>Basic Info</span>
+                <span>Details</span>
+                <span>Profile</span>
+                <span>Password</span>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Step 1: Basic Info -->
+                <div id="step1" class="step-content">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                </div>
+
+                <!-- Step 2: Details -->
+                <div id="step2" class="step-content d-none">
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" name="address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pincode" class="form-label">Pincode</label>
+                        <input type="number" class="form-control" id="pincode" name="pincode">
+                    </div>
+                </div>
+
+                <!-- Step 3: Profile Picture with Preview -->
+                <div id="step3" class="step-content d-none text-center">
+                    <label for="profile_picture" class="form-label">Profile Picture</label>
+                    <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" onchange="previewImage(event)">
+                    <img id="imagePreview" class="mt-3 rounded-circle" style="display: none; width: 150px; height: 150px; object-fit: cover;" />
+                </div>
+
+                <!-- Step 4: Password -->
+                <div id="step4" class="step-content d-none">
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password1" name="password1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" id="prev-btn" class="btn btn-secondary" onclick="prevStep()" style="display: none;">Previous</button>
+                    <button type="button" id="next-btn" class="btn btn-primary ms-auto" onclick="nextStep()">Next</button>
+                </div>
+            </form>
+            <a href="{% url 'home' %}">back to home</a>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert 
+                    {% if message.tags == 'success' %}alert-success
+                    {% elif message.tags == 'error' or message.tags == 'danger' %}alert-danger
+                    {% elif message.tags == 'warning' %}alert-warning
+                    {% elif message.tags == 'info' %}alert-info
+                    {% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    let currentStep = 1;
+    function updateStepper() {
+        document.querySelectorAll('.step-content').forEach((el, index) => {
+            el.classList.toggle('d-none', index + 1 !== currentStep);
+        });
+
+        document.querySelectorAll('.step').forEach((el, index) => {
+            el.classList.toggle('active', index + 1 === currentStep);
+            el.classList.toggle('completed', index + 1 < currentStep);
+        });
+
+        document.getElementById('prev-btn').style.display = currentStep === 1 ? 'none' : 'block';
+        document.getElementById('next-btn').innerText = currentStep === 4 ? 'Submit' : 'Next';
+    }
+
+    function nextStep() {
+        if (currentStep < 4) {
+            currentStep++;
+            updateStepper();
+        } else {
+            document.querySelector("form").submit();
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            updateStepper();
+        }
+    }
+
+    function previewImage(event) {
+        const imagePreview = document.getElementById('imagePreview');
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", updateStepper);
+</script>
+
+</body>
+</html>

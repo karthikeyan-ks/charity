@@ -1,0 +1,64 @@
+/* Smooth Theme Transition */
+.transition-effect {
+    transition: all 0.5s ease-in-out;
+}
+
+/* Hover Effects */
+.card:hover {
+    transform: scale(1.05);
+    transition: all 0.5s ease-in-out;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    
+}
+
+/* Button Hover Effect */
+.btn-hover:hover {
+    transform: translateY(-2px);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Dark Mode Enhancements */
+.dark-mode .mode-toggle {
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
+.dark-mode .mode-toggle:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Light Mode Enhancements */
+.light-mode .mode-toggle {
+    background: white;
+    color: black;
+    border: 1px solid #ddd;
+}
+
+.light-mode .mode-toggle:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/* Add this to your base.css file */
+@keyframes scaleUp {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+@keyframes ZoomUp {
+    from {
+        transform: scale(1);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+.card{
+    animation: scaleUp 0.5s ease-out;
+}

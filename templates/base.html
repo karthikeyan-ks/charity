@@ -25,7 +25,13 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'auth_signup' %}">Signup</a></li>
+                    <li class="nav-item" >
+                        <button class=" nav-link" data-bs-toggle="modal" data-bs-target="#signupModal">
+                            Signup
+                        </button>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">logout</a></li>
+                    
                 </ul>
 
                 <!-- Dark Mode Toggle Button -->
@@ -34,11 +40,40 @@
                 </button>
             </div>
         </div>
+        <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="signupModalLabel">Choose Signup Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>Are you signing up as a Donor or an Organization?</p>
+                        <a href="{% url 'auth_signup_donor' %}" class="btn btn-success">Donor</a>
+                        <a href="{% url 'auth_signup_organization' %}" class="btn btn-info">Organization</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </nav>
 
     <!-- Page Content -->
     <div class="container container-height mt-4">
         {% block content %}{% endblock %}
+    </div>
+    <!-- Toast Notification Container -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050">
+        {% for message in messages %}
+        <div id="toast{{ forloop.counter }}" class="toast align-items-center text-white {% if message.tags == 'error' %}bg-danger{% else %}bg-success{% endif %} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="10000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
     <!-- Footer -->
@@ -96,6 +131,11 @@
                     themeToggle.classList.add("btn-outline-dark");
                     localStorage.setItem("theme", "dark");
                 }
+            });
+            const toastElements = document.querySelectorAll(".toast");
+            toastElements.forEach(toastElement => {
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show(); // Show each toast message
             });
         });
     </script>

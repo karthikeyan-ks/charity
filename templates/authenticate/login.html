@@ -48,7 +48,7 @@
 
                         <div class="d-flex justify-content-between">
                             <div>
-                                <input type="checkbox" id="remember" class="form-check-input">
+                                <input type="checkbox" id="remember" name="remember" class="form-check-input">
                                 <label for="remember" class="form-check-label">Remember me</label>
                             </div>
                             <a href="#" class="text-decoration-none text-center">Forgot Password?</a>
@@ -59,7 +59,22 @@
                     </form>
 
                     <div class="text-center mt-3">
-                        <p>Don't have an account? <a href="{% url 'auth_signup'%}">Sign Up</a></p>
+                        <p>Don't have an account? <a href="" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</a></p>
+                    </div>
+                    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="signupModalLabel">Choose Signup Type</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <p>Are you signing up as a Donor or an Organization?</p>
+                                    <a href="{% url 'auth_signup_donor' %}" class="btn btn-success">Donor</a>
+                                    <a href="{% url 'auth_signup_organization' %}" class="btn btn-info">Organization</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Dark Mode Toggle -->

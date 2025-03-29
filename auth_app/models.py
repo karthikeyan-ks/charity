@@ -21,6 +21,8 @@ class CustomUser(AbstractUser):
 class Donor(models.Model):
     did = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="user_donor")
+    address = models.TextField(default="address 1")
+    pincode = models.CharField(max_length=6,default="123456")
     
     def __str__(self):
         return self.user.first_name
@@ -30,7 +32,6 @@ class Organization(models.Model):
     oid = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="user_organization")
     license = models.CharField(max_length=100)
-    phone = models.CharField(max_length=10)
     address = models.TextField()
     pincode = models.CharField(max_length=6)
     
