@@ -10,6 +10,7 @@ urlpatterns = [
     path('',home, name="home"),
     path('admin/', admin.site.urls),
     path('auth/', include('auth_app.urls')),
+    path('organization/',include('Organization.urls'))
 ]
 
 if settings.DEBUG:
