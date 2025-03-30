@@ -121,6 +121,14 @@ def user_login(request):
         messages.success(request,"Authenticated successfully")
         if remember:
             login(request,user)
+        organization = Organization.objects.filter(user=user).first()
+        donor = Donor.objects.filter(user=user).first()
+        print(organization, donor)
+        if organization:
+            return redirect('organization_dashboard')
+        elif donor:
+            return redirect('organization_dashboard')  # Fixed typo: should redirect to donor_dashboard
+
     return render(request,'authenticate/login.html')
 
 

@@ -25,7 +25,7 @@ class Donor(models.Model):
     pincode = models.CharField(max_length=6,default="123456")
     
     def __str__(self):
-        return self.user.first_name
+        return self.user.email
     
 
 class Organization(models.Model):
@@ -36,5 +36,5 @@ class Organization(models.Model):
     pincode = models.CharField(max_length=6)
     
     def __str__(self):
-        return self.user.first_name
+        return self.user.email
     
