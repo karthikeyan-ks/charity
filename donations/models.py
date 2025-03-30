@@ -15,7 +15,7 @@ class AvailableDays(models.Model):
     def __str__(self):
         return self.name
 
-class donations(models.Model):
+class Donations(models.Model):
     rid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
