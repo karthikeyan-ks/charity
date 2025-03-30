@@ -1,0 +1,19 @@
+.image-view{
+    max-height: 200px;
+}
+body.dark-mode .card {
+    background-color: #222;
+    color: #fff;
+}
+
+body.dark-mode .btn {
+    background-color: #444;
+    color: white;
+}
+
+body.dark-mode .dropdown-menu {
+    background-color: #333;
+}
+.text-muted {
+    color: var(--bs-secondary-color); /* ✅ Dynamic Bootstrap variable */
+}

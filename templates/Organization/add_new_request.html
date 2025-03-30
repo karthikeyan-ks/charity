@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}new Resource Request{% endblock title %}
+{% block content %}
+<div class="col-6 mt-4">
+    <h2 class="mb-4">Add New Request</h2>
+    
+    <form method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm">
+        {% csrf_token %}
+
+        <!-- Name Field -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Request Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <!-- Description Field -->
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+
+        <!-- Resource Selection -->
+        <div class="mb-3">
+            <label for="resource" class="form-label">Select Resource</label>
+            <select class="form-control" id="resource" name="resource" required>
+                <option value="" disabled selected>Choose a resource</option>
+                {% for resource in resources %}
+                <option value="{{ resource.rid }}">{{ resource.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Quantity Field -->
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
+        </div>
+
+        <!-- Available Days (Checkbox) -->
+        <div class="mb-3">
+            <label class="form-label">Available Days</label>
+            <div class="d-flex flex-wrap">
+                {% for day in available_days %}
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="day_{{ day.id }}" name="available_days" value="{{ day.aid }}">
+                    <label class="form-check-label" for="day_{{ day.id }}">{{ day.name }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="mb-3">
+            <label for="pic" class="form-label">Upload Image</label>
+            <input type="file" class="form-control" id="pic" name="pic">
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Submit Request</button>
+    </form>
+</div>
+{% endblock %}
+
