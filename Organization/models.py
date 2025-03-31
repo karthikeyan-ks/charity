@@ -27,7 +27,9 @@ class RequestResource(models.Model):
     pic = models.ImageField(upload_to="organization/",blank=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
-    pick_up_available = models.BooleanField(default=False)
+    logistic_partner = models.ForeignKey('auth_app.LogisticPartner',on_delete=models.CASCADE,related_name="logistic_partner_organization",blank=True,null=True)
+    donated = models.ForeignKey('auth_app.Donor',on_delete=models.CASCADE,related_name="donated_by_donor",blank=True,null=True)
+    
     
     def __str__(self):
         return self.name

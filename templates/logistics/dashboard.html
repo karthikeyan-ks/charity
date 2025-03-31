@@ -12,6 +12,9 @@
     <h2 class="text-center mb-4">📋 Logistic Requests</h2>
     <div class="d-flex flex-direction-row justify-content-start">
         <form method="GET" class="w-100 d-flex flex-row">
+            {% if organization %}
+            <a href="{% url 'organization_dashboard' %}" class="btn btn-secondary m-2">Switch to Organization</a>
+            {% endif %}
             <a href="{% url 'new_resource_request' %}" class="btn btn-secondary m-2">Add new Request</a>
             <div class="dropdown">
                 <button class="btn btn-secondary m-2 dropdown-toggle" id="sortButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,9 +42,9 @@
             <button type="submit" class="btn btn-primary m-2">Apply</button>
         </form>
     </div>
-    {% if delivery_requests %}
+    {% if delivery_request %}
     <div class="row">
-        {% for request in delivery_requests %}
+        {% for request in delivery_request %}
         <div class="col-md-6 col-lg-4">
             <div class="card shadow-sm mb-4">
                 {% if request.pic %}
@@ -49,48 +52,58 @@
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">
-                        <i class="bi bi-box"></i> {{ request.name }}
+                        <i class="bi bi-box"></i> Transaction :  {{ request.delivered_by.username }} to {{request.delivered_to.username}}
                     </h5>
-                    <p class="card-text"><i class="bi bi-file-text"></i> {{ request.description }}</p>
+                    <p class="card-text"><i class="bi bi-file-text"></i> {{ request.donation.description }}</p>
                     <p class="fw-bold">
-                        <i class="bi bi-hash"></i> Quantity: {{ request.quantity }}
+                        <i class="bi bi-hash"></i> Quantity: {{ request.donation.quantity }}
                     </p>
                     <p class="fw">
                         <i class="bi bi-person"></i> Created by: you
                     </p>
                     <p class="fw">
-                        <i class="bi bi-calendar" data-bs-toggle="tooltip" title="Date Created"></i> {{ request.created_at|date:"M d, Y" }}
+                        <i class="bi bi-calendar" data-bs-toggle="tooltip" title="Date Created"></i> {{ request.date|date:"M d, Y" }}
                     </p>
                     <p class="fw">
-                        <i class="bi bi-box-seam" data-bs-toggle="tooltip" title="Resource Type"></i> {{ request.resource }}
+                        <i class="bi bi-box-seam" data-bs-toggle="tooltip" title="Resource Type"></i> {{ request.donation.resource }}
                     </p>
-                    <p class="fw">
-                        {% if request.available_days.all %}
-                            <p class="fw d-flex flex-wrap gap-2">
-                                <i class="bi bi-clock-history" data-bs-toggle="tooltip" title="Available Days"></i>
-                                Available Days
-                                {% for day in request.available_days.all %}
-                                    <span class="badge bg-secondary"><i class="bi bi-calendar-week"></i> {{ day }}</span>
-                                {% endfor %}
-                            </p>
-                        {% else %}
-                            <p class="text-muted">Not Specified</p>
-                        {% endif %}
+                    <!-- Display status buttons based on current state -->
+                    <div class="container mt-4">
+                        <h5 class="text-center mb-4">Transportation Status</h5>
                     
-                    </p>
+                        <div class="d-flex justify-content-center gap-4">
+                            <!-- Stepper -->
+                            <div class="d-flex align-items-center gap-4">
+                                <!-- Step 1: Accept -->
+                                <div class="step" id="accept-step">
+                                    <a href="" class="btn btn-circle {% if request.accept %}btn-success{% else %}btn-outline-success{% endif %}" data-bs-toggle="tooltip" title="Accept" onclick="changeStatus('{{ request.did }}', 'accept')">
+                                        <i class="bi bi-check-circle"></i>
+                                        <i class="bi bi-check2-circle tick-icon {% if request.accept %}d-block{% else %}d-none{% endif %}"></i>
+                                    </a>
+                                    <span>Accept</span>
+                                </div>
                     
-                </div>
-                <div class="w-100 d-flex flex-row gap-2 m-2">
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ request.rid }}" data-bs-toggle="tooltip" title="Delete">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                    <a href="{% url 'request_update' request.rid %}" class="btn btn-warning" data-bs-toggle="tooltip" title="Update">
-                        <i class="bi bi-pencil"></i>
-                    </a>
-                    <a href="" class="btn btn-primary" data-bs-toggle="tooltip" title="See Similar Donations">
-                        <i class="bi bi-eye"></i>
-                    </a>
-                </div>                
+                                <!-- Step 2: Pickup -->
+                                <div class="step" id="pickup-step">
+                                    <a href="" class="btn btn-circle {% if request.pickup %}btn-warning{% else %}btn-outline-warning{% endif %}" data-bs-toggle="tooltip" title="Pickup" onclick="changeStatus('{{ request.did }}', 'pickup')">
+                                        <i class="bi bi-truck"></i>
+                                        <i class="bi bi-check2-circle tick-icon {% if request.pickup %}d-block{% else %}d-none{% endif %}"></i>
+                                    </a>
+                                    <span>Pickup</span>
+                                </div>
+                    
+                                <!-- Step 3: Finish -->
+                                <div class="step" id="finish-step">
+                                    <a href="" class="btn btn-circle {% if request.finished %}btn-primary{% else %}btn-outline-primary{% endif %}" data-bs-toggle="tooltip" title="Finish" onclick="changeStatus('{{ request.did }}', 'finish')">
+                                        <i class="bi bi-check2-circle"></i>
+                                        <i class="bi bi-check2-circle tick-icon {% if request.finished %}d-block{% else %}d-none{% endif %}"></i>
+                                    </a>
+                                    <span>Finish</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                                         
+                </div>             
                 <div class="modal fade" id="deleteModal{{ request.rid }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ request.rid }}" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -103,7 +116,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <a href="{% url 'request_delete' request.rid %}" class="btn btn-danger">Delete</a>
+                                <a href="" class="btn btn-danger">Delete</a>
                             </div>
                         </div>
                     </div>
@@ -121,35 +134,61 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    
     document.addEventListener("DOMContentLoaded", function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-        const sortOptions = document.querySelectorAll(".sort-option");
-        const filterOptions = document.querySelectorAll(".filter-option");
-        const sortInput = document.getElementById("sortInput");
-        const filterTypeInput = document.getElementById("filterTypeInput");
+        var sortOptions = document.querySelectorAll(".sort-option");
+        var filterOptions = document.querySelectorAll(".filter-option");
+        var sortInput = document.getElementById("sortInput");
+        var filterTypeInput = document.getElementById("filterTypeInput");
+        var filterInput = document.getElementById("filterInput");
+        var sortButton = document.getElementById("sortButton");
+        var filterTypeButton = document.getElementById("filterTypeButton");
+
+        // Handle sorting
         sortOptions.forEach(option => {
-            console.log(option)
             option.addEventListener("click", function () {
-                console.log(this.getAttribute("data-value"))
-                sortInput.value = this.getAttribute("data-value"); 
-                sortButton.innerText = sortButton.innerText + sortInput.value
+                var selectedSort = this.getAttribute("data-value");
+                sortInput.value = selectedSort;
+                sortButton.innerText = "Sort by: " + selectedSort;
             });
         });
+
+        // Handle filtering
         filterOptions.forEach(option => {
             option.addEventListener("click", function () {
-                filterTypeInput.value = this.getAttribute("data-value");
-                filterTypeButton.innerText = filterTypeButton.innerText + filterTypeInput.value
+                var selectedFilter = this.getAttribute("data-value");
+                filterTypeInput.value = selectedFilter;
+                filterTypeButton.innerText = "Filter by: " + selectedFilter;
             });
         });
-        document.getElementById("confirmDelete").addEventListener("click", function() {
-            // Perform delete action (e.g., API call or form submission)
-            alert("Item deleted successfully!");  // Replace this with actual delete logic
-            var modal = new bootstrap.Modal(document.getElementById("deleteModal"));
-            modal.hide();  // Hide the modal after action
-        });
     });
+    function changeStatus(requestId, status) {
+        console.log(document.querySelector('[name=csrfmiddlewaretoken]'))
+        // Make AJAX request to update the status
+        fetch(`/logistics/update-status/${requestId}/${status}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({status: status})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const step = document.getElementById(`${status}-step`);
+                const link = step.querySelector("a");
+                const tickIcon = step.querySelector(".tick-icon");
+
+                // Update the link appearance to reflect the status change
+                link.classList.remove(`btn-outline-${status}`);
+                link.classList.add(`btn-${status}`);
+                tickIcon.classList.remove("d-none");
+                tickIcon.classList.add("d-block");
+            } else {
+                alert("Failed to update status: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
 </script>
 {% endblock %}

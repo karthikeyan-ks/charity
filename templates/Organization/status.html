@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/organization/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+{% endblock %}
+{% block title %}Status{% endblock %}
+{% block content %}
+{% if request %}
+<div class="col-9 mt-4">
+    <h5 class="text-center mb-4">Transportation Status</h5>
+
+    <div class="d-flex justify-content-center gap-4">
+        <!-- Stepper -->
+        <div class="d-flex align-items-center gap-4">
+            <!-- Step 1: Accept -->
+            <div class="step" id="accept-step">
+                <button type="button" class="btn btn-circle {% if request.accept %}btn-success{% else %}btn-outline-success{% endif %}" data-bs-toggle="tooltip" title="Accept" onclick="changeStatus('{{ request.did }}', 'accept')">
+                    <i class="bi bi-check-circle"></i>
+                    <i class="bi bi-check2-circle tick-icon {% if request.accept %}d-block{% else %}d-none{% endif %}"></i>
+                </button>
+                <span>Accept</span>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="progress-indicator {% if request.accept %}active{% endif %}"></div>
+
+            <!-- Step 2: Pickup -->
+            <div class="step" id="pickup-step">
+                <button type="button" class="btn btn-circle {% if request.pickup %}btn-warning{% else %}btn-outline-warning{% endif %}" data-bs-toggle="tooltip" title="Pickup" onclick="changeStatus('{{ request.did }}', 'pickup')">
+                    <i class="bi bi-truck"></i>
+                    <i class="bi bi-check2-circle tick-icon {% if request.pickup %}d-block{% else %}d-none{% endif %}"></i>
+                </button>
+                <span>Pickup</span>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="progress-indicator {% if request.pickup %}active{% endif %}"></div>
+
+            <!-- Step 3: Finish -->
+            <div class="step" id="finish-step">
+                <button type="button" class="btn btn-circle {% if request.finished %}btn-success{% else %}btn-outline-success{% endif %}" data-bs-toggle="tooltip" title="Finish" onclick="changeStatus('{{ request.did }}', 'finish')">
+                    <i class="bi bi-check2-circle"></i>
+                    <i class="bi bi-check2-circle tick-icon {% if request.finished %}d-block{% else %}d-none{% endif %}"></i>
+                </button>
+                <span>Finish</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+    <div class="alert alert-warning text-center">
+        🚫 No delivery requests .
+    </div>
+{% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

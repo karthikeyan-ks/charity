@@ -7,22 +7,22 @@
 {% block title %}Organization Dashboard{% endblock %}
 {% block content %}
 
-<div class="container mt-4 ">
+<div class="container mt-4">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <h2 class="text-center mb-4">📋 Resource Requests</h2>
+    <h2 class="text-center mb-4">📋 Donations Made </h2>
     <div class="d-flex flex-direction-row justify-content-start">
+        {{ logistic }}
         <form method="GET" class="w-100 d-flex flex-row">
-            {% if logisticPartner %}
-            <a href="{% url 'logistic_dashboard' %}" class="btn btn-secondary m-2">Switch to logisticPartner</a>
-            {% endif %}
-            <a href="{% url 'new_resource_request' %}" class="btn btn-secondary m-2">Add new Request</a>
+            <a href="{% url 'search_requests' %}" class="btn btn-secondary m-2">Add new Donation</a>
+            
+            
             <div class="dropdown">
                 <button class="btn btn-secondary m-2 dropdown-toggle" id="sortButton" data-bs-toggle="dropdown" aria-expanded="false">
                     Sort by
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="sortButton">
                     <li><a class="dropdown-item sort-option" data-value="name">Name</a></li>
-                    <li><a class="dropdown-item sort-option" data-value="resource"> resource</a></li>
+                    <li><a class="dropdown-item sort-option" data-value="resource">Resource</a></li>
                     <li><a class="dropdown-item sort-option" data-value="quantity">Quantity</a></li>
                 </ul>
             </div>
@@ -36,15 +36,15 @@
                     <li><a class="dropdown-item filter-option" data-value="resource">Resource</a></li>
                 </ul>
             </div>
-            <input type="hidden" name="sort" id="sortInput" value="">
-            <input type="hidden" name="filter_type" id="filterTypeInput" value="">
-            <input type="text" name="filter_value" id="filterInput" class="m-2" placeholder="Enter filter keyword...">
+            <input type="hidden" name="sort" id="sortInput" value="{{ request.GET.sort }}">
+            <input type="hidden" name="filter_type" id="filterTypeInput" value="{{ request.GET.filter_type }}">
+            <input type="text" name="filter_value" id="filterInput" class="m-2" placeholder="Enter filter keyword..." value="{{ request.GET.filter_value }}">
             <button type="submit" class="btn btn-primary m-2">Apply</button>
         </form>
     </div>
-    {% if requests %}
+    {% if donations %}
     <div class="row">
-        {% for request in requests %}
+        {% for request in donations %}
         <div class="col-md-6 col-lg-4">
             <div class="card shadow-sm mb-4">
                 {% if request.pic %}
@@ -59,49 +59,28 @@
                         <i class="bi bi-hash"></i> Quantity: {{ request.quantity }}
                     </p>
                     <p class="fw">
-                        <i class="bi bi-person"></i> Created by: you
+                        <i class="bi bi-person"></i> Donated by: you
                     </p>
-                    <p class="fw">
-                        <i class="bi bi-calendar" data-bs-toggle="tooltip" title="Date Created"></i> {{ request.created_at|date:"M d, Y" }}
-                    </p>
-                    <p class="fw">
-                        <i class="bi bi-box-seam" data-bs-toggle="tooltip" title="Resource Type"></i> {{ request.resource }}
-                    </p>
-                    <p class="fw">
-                        {% if request.available_days.all %}
-                            <p class="fw d-flex flex-wrap gap-2">
-                                <i class="bi bi-clock-history" data-bs-toggle="tooltip" title="Available Days"></i>
-                                Available Days
-                                {% for day in request.available_days.all %}
-                                    <span class="badge bg-secondary"><i class="bi bi-calendar-week"></i> {{ day }}</span>
-                                {% endfor %}
-                            </p>
-                        {% else %}
-                            <p class="text-muted">Not Specified</p>
-                        {% endif %}
-                    
-                    </p>
-                    
+                    {% if request.donated_to is not None %}
+                        <p class="fw">
+                            <i class="bi bi-box-seam" data-bs-toggle="tooltip" title="Resource Type"></i> Donated to : {{ request.donated_to.name }}({{ request.donated_to.created_by.user.username }})
+                        </p>
+                    {% endif %}
                 </div>
                 <div class="w-100 d-flex flex-row gap-2 m-2">
-                    {% if not request.donated %}
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ request.rid }}" data-bs-toggle="tooltip" title="Delete">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                    <a href="{% url 'request_update' request.rid %}" class="btn btn-warning" data-bs-toggle="tooltip" title="Update">
-                        <i class="bi bi-pencil"></i>
-                    </a>
-                    <a href="{% url 'similar_donations' request.rid%}" class="btn btn-primary" data-bs-toggle="tooltip" title="See Similar Donations">
+                    {% if request.donated_to is None %}
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ request.rid }}" data-bs-toggle="tooltip" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                        <a href="{% url 'request_update' request.rid %}" class="btn btn-warning" data-bs-toggle="tooltip" title="Update">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    {% else %}
+                    <a href="" class="btn btn-primary" data-bs-toggle="tooltip" title="See status">
                         <i class="bi bi-eye"></i>
                     </a>
-                    {% else %}
-                    <a href="{% url 'logistic_status' request.rid%}" class="btn btn-secondary" data-bs-toggle="tooltip" title="See Donation Status">
-                        <i class="bi bi-info-circle"></i>
-                    </a>  
                     {% endif %}
-                    
-                                      
-                </div>                
+                </div>
                 <div class="modal fade" id="deleteModal{{ request.rid }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ request.rid }}" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -114,44 +93,54 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <a href="{% url 'request_delete' request.rid %}" class="btn btn-danger">Delete</a>
+                                <a href="{% url 'donation_delete' request.rid %}" class="btn btn-danger">Delete</a>
                             </div>
                         </div>
                     </div>
-                </div>               
+                </div>
             </div>
         </div>
         {% endfor %}
     </div>
 {% else %}
     <div class="alert alert-warning text-center">
-        🚫 No resource requests available.
+        🚫 No delivery requests.
     </div>
 {% endif %}
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Initialize tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+    
+        // Handle Sort Options
         const sortOptions = document.querySelectorAll(".sort-option");
         const filterOptions = document.querySelectorAll(".filter-option");
         const sortInput = document.getElementById("sortInput");
         const filterTypeInput = document.getElementById("filterTypeInput");
+        const filterInput = document.getElementById("filterInput");
+        const form = document.querySelector("form");
+    
+        // Handle Sort option clicks
         sortOptions.forEach(option => {
             console.log(option)
             option.addEventListener("click", function () {
-                console.log(this.getAttribute("data-value"))
-                sortInput.value = this.getAttribute("data-value"); 
+                sortInput.value = this.getAttribute("data-value"); // Update hidden sort input value
                 sortButton.innerText = sortButton.innerText + sortInput.value
             });
         });
+    
+        // Handle Filter option clicks
         filterOptions.forEach(option => {
+            console.log(option)
             option.addEventListener("click", function () {
-                filterTypeInput.value = this.getAttribute("data-value");
+                filterTypeInput.value = this.getAttribute("data-value"); // Update hidden filter type
                 filterTypeButton.innerText = filterTypeButton.innerText + filterTypeInput.value
             });
         });
@@ -161,6 +150,9 @@
             var modal = new bootstrap.Modal(document.getElementById("deleteModal"));
             modal.hide();  // Hide the modal after action
         });
+    
+        // Optional: Trigger form submission when user types in the filter input
     });
+    
 </script>
 {% endblock %}

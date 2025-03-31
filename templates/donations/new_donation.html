@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/donations/new_donation.css' %}"/>
+{% endblock extra_css %}
+{% block title %}New Resource Request{% endblock title %}
+{% block content %}
+<div class="col-6 mt-4">
+    <h2 class="mb-4">Add New Donation</h2>
+    <div class="mb-4">
+        <h4>Search Requests</h4>
+        <form method="GET" action="{% url 'search_requests' %}" class="d-flex">
+            <!-- Dropdown for search category -->
+            <select class="form-select me-2" name="category" required>
+                <option value="name">Search by Name</option>
+                <option value="resource">Search by Resource Type</option>
+                <option value="quantity">Search by Quantity</option>
+            </select>
+
+            <!-- Search Box -->
+            <input type="text" class="form-control me-2" name="q" placeholder="Search for requests..." required>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+
+        <!-- Display Search Results as Dropdown -->
+        
+    </div>
+    
+    <form method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm">
+        {% csrf_token %}
+
+        {% if results %}
+        <div class="m-3">
+            <h5>Select a Request</h5>
+            <select class="form-select" name="selected_request" id="request-select" onchange="updateFields()" >
+                <option value="" disabled selected>Select a request from the list</option>
+                {% for result in results %}
+                <option value="{{ result.rid }}" data-resource="{{ result.resource.rid }}" data-quantity="{{ result.quantity }}">
+                    {{ result.name }} (Type: {{ result.resource.name }}, Quantity: {{ result.quantity }}, Created by: {{ result.user.username }})
+                </option>
+                {% endfor %}
+            </select>
+            <button type="button" class="btn btn-outline-secondary mt-2" onclick="clearSelection()">Clear Selection</button>
+            <p class="note">note: You can create a donation without selecting any of the resource requests. It will be an anonymous donation and anyone with similar resource type can take it.</p>
+        </div>        
+        {% endif %}
+
+        <!-- Name Field -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Donation Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <!-- Description Field -->
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+
+        <!-- Resource Selection -->
+        <div class="mb-3">
+            <label for="resource" class="form-label">Select Resource</label>
+            <select class="form-control" id="resource" name="resource" required>
+                <option value="" disabled selected>Choose a resource</option>
+                {% for resource in resources %}
+                <option value="{{ resource.rid }}">{{ resource.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Quantity Field -->
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="mb-3">
+            <label for="pic" class="form-label">Upload Image</label>
+            <input type="file" class="form-control" id="pic" name="pic">
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Submit Donation</button>
+    </form>
+
+</div>
+
+<script>
+    function updateFields() {
+        
+        var selectedRequest = document.getElementById("request-select").value;
+        var selectedOption = document.querySelector("#request-select option:checked");
+        
+        // Get the resource and quantity data from the selected option
+        var resourceId = selectedOption.getAttribute("data-resource");
+        var quantity = selectedOption.getAttribute("data-quantity");
+
+        // Set the resource field to match the selected request's resource
+       
+        
+        var resourceField = document.getElementById("resource");
+        resourceField.disabled =false
+        for (var option of resourceField.options) {
+            if (option.value == resourceId) {
+                option.selected = true;
+                break;
+            }
+        }
+        
+
+        // Set the quantity field to match the selected request's quantity
+        var quantityField = document.getElementById("quantity");
+        quantityField.disabled =false
+        quantityField.value = quantity;
+        quantityField.disabled =true
+        resourceField.disabled =true
+    }
+
+    function clearSelection() {
+        var requestSelect = document.getElementById("request-select");
+        var resourceField = document.getElementById("resource");
+        var quantityField = document.getElementById("quantity");
+
+        // Reset dropdown selection
+        requestSelect.value = "";
+
+        // Enable and reset fields
+        resourceField.disabled = false;
+        quantityField.disabled = false;
+        quantityField.value = "";
+        resourceField.selectedIndex = 0;
+    }
+    
+    document.querySelector("form").addEventListener("submit", function() {
+        document.getElementById("resource").disabled = false;
+        document.getElementById("quantity").disabled = false;
+    });
+
+</script>
+
+{% endblock %}

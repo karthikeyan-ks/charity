@@ -11,6 +11,7 @@ class DeliveryRequest(models.Model):
     request = models.ForeignKey('Organization.RequestResource',on_delete=models.CASCADE,related_name="request_organization")
     date = models.DateField(default=timezone.now)
     accept = models.BooleanField(default=False)
+    pickup = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
     
     def __str__(self):

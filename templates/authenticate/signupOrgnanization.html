@@ -62,6 +62,28 @@
                         <label for="license" class="form-label">License</label>
                         <input type="number" class="form-control" id="license" name="license">
                     </div>
+
+                    <!-- Checkbox for Pickup Availability (Checked by Default) -->
+                    <div class="mb-3">
+                        <label class="form-check-label" for="pickup">
+                            <input type="checkbox" class="form-check-input" id="pickup" name="pickup" checked> Is Pickup Availability?
+                        </label>
+                    </div>
+
+                    <!-- Select dropdown that appears only if "Is Pickup Availability?" is unchecked -->
+                    <div class="mb-3" id="pickup-location-select" style="display: none;">
+                        <label for="pickup-location" class="form-label">Select Pickup Location</label>
+                        <select class="form-control" id="pickup-location" name="pickup_partner" required>
+                            {% if logisticPartner %}
+                            {% for partner in logisticPartner %}
+                                <option value="{{ partner.lid }}">{{partner.user.username}}</option>
+
+                            {% endfor %}
+                            
+                            {% else %}
+                            {% endif %}
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Step 3: Profile Picture with Preview -->
@@ -106,7 +128,26 @@
     </div>
 </div>
 
+
 <script>
+    var pickupCheckbox = document.getElementById("pickup");
+    var pickupLocationSelect = document.getElementById("pickup-location-select");
+
+    // Function to toggle the visibility of the select tag based on checkbox state
+    pickupCheckbox.addEventListener("change", function() {
+        if (pickupCheckbox.checked) {
+            // If checked, hide the select dropdown
+            pickupLocationSelect.style.display = "none";
+        } else {
+            // If unchecked, show the select dropdown
+            pickupLocationSelect.style.display = "block";
+        }
+    });
+
+    // Initial check on page load to handle default state of checkbox (checked by default)
+    if (!pickupCheckbox.checked) {
+        pickupLocationSelect.style.display = "block";  // Show the select if checkbox is unchecked
+    }
     let currentStep = 1;
     function updateStepper() {
         document.querySelectorAll('.step-content').forEach((el, index) => {

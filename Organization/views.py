@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import RequestResource,Resource,AvailableDays
-from auth_app.models import Organization,Donor
+from auth_app.models import Organization,Donor,LogisticPartner
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import FieldDoesNotExist
@@ -9,6 +9,9 @@ from django.core.exceptions import FieldDoesNotExist
 @login_required
 def Dashboard(request):
     organization = Organization.objects.filter(user=request.user).first()
+    logisticPartner = LogisticPartner.objects.filter(user = request.user).first()
+    print("Logistic",logisticPartner)
+    # Handle sorting
     if not organization:
         messages.error(request,'User is not a organization enlisted in our site')
         return redirect('auth_login')
@@ -39,7 +42,8 @@ def Dashboard(request):
         print(sort_by,requests)
     return render(request,'Organization/dashboard.html',{
         'requests':requests,
-        'user':request.user
+        'user':request.user,
+        'logisticPartner':logisticPartner
         })
     
  

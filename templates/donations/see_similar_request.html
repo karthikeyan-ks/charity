@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Similar Donations</h2>
+    
+    {% if donation %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Resource</th>
+                    <th>Quantity</th>
+                    <th>Donor</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in donation %}
+                    <tr>
+                        <td>{{ d.resource }}</td>
+                        <td>{{ d.quantity }}</td>
+                        <td>{{ d.donated_by.username }}</td>
+                        <td>
+                            {% if d.rid %}
+                                <form action="{% url 'accept_donation' d.rid %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">Accept</button>
+                                </form>
+                            {% else %}
+                                <p>No donation ID available</p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    {% else %}
+        <p>No similar donations found.</p>
+    {% endif %}
+</div>
+{% endblock %}

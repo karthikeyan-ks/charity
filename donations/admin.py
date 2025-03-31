@@ -1,6 +1,4 @@
 from django.contrib import admin
-from .models import Donations,AvailableDays,Resource
+from .models import Donations
 admin.site.register(Donations)
-admin.site.register(AvailableDays)
-admin.site.register(Resource)
 # Register your models here.

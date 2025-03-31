@@ -36,6 +36,7 @@ class LogisticPartner(models.Model):
     noe = models.IntegerField(default=1)#number of employee
     available_employee = models.IntegerField(default=1)
     
+    
     def __str__(self):
         return self.user.username
     
@@ -46,6 +47,7 @@ class Organization(models.Model):
     license = models.CharField(max_length=100)
     address = models.TextField()
     pincode = models.CharField(max_length=6)
+    logisticPartner = models.ForeignKey(LogisticPartner,on_delete=models.CASCADE,related_name="organization_logistic_partner",default=1)
     
     def __str__(self):
         return self.user.email

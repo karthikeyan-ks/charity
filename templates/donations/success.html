@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Donation Successful{% endblock title %}
+
+{% block content %}
+<div class="col-6 mt-4 text-center">
+    <h2 class="mb-4 text-success">Donation Submitted Successfully! ✅</h2>
+
+    {% if donation %}
+        <p><strong>Name:</strong> {{ donation.name }}</p>
+        <p><strong>Description:</strong> {{ donation.description }}</p>
+        <p><strong>Resource ID:</strong> {{ donation.resource }}</p>
+        <p><strong>Quantity:</strong> {{ donation.quantity }}</p>
+    {% endif %}
+
+    <a href="{% url 'donation_dashboard' %}" class="btn btn-primary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

@@ -1,7 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
-from .forms import SignupForm
 from .models import CustomUser,UserTypes,Donor,Organization,LogisticPartner
 
 def home(request):
@@ -29,8 +28,8 @@ def signupDonor(request):
         
         if CustomUser.objects.filter(email=email).exists():
             messages.error(request, "Email is already registered!")
-        
             return redirect("auth_signup_donor")
+        
         user = CustomUser(
             username = username,
             email = email,
@@ -53,13 +52,13 @@ def signupDonor(request):
         messages.success(request,"You are authenticated..")
         if user is not None:
             login(request,user)
-        return redirect('donor_dashboard')
+        return redirect('donation_dashboard')
     return render(request, 'authenticate/signupDonor.html', {'form': form})
 
 
 
 def signupOrganization(request):
-    form = None
+    logisticPartner = LogisticPartner.objects.all()
     user_type = UserTypes.objects.filter(name="Organization").first()
     if request.method == "POST":
         username = request.POST.get("username")
@@ -71,7 +70,9 @@ def signupOrganization(request):
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
         profile_picture = request.FILES.get("profile_picture")
-        
+        pickup = request.POST.get("pickup")
+        pickup_partner =request.POST.get("pickup_partner")
+        print(pickup_partner,pickup)
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
             redirect('auth_signup_organization')
@@ -99,6 +100,18 @@ def signupOrganization(request):
             pincode = pin,
             license = license
         )
+        if pickup == "on":
+            logisticPartner = LogisticPartner.objects.create(
+                user = user,
+                license = license,
+                pincode = pin,
+                address = address,
+            )
+            organization.logisticPartner = logisticPartner
+        else:
+            if pickup_partner:
+                logisticPartner = LogisticPartner.objects.filter(lid=int(pickup_partner))
+                organization.logisticPartner = logisticPartner
         print(username,email,address,pin,phone,password1,password2,license)
         organization.save()
         user = authenticate(request=request,username=username,password=password1)
@@ -106,7 +119,8 @@ def signupOrganization(request):
         if user is not None:
             login(request,user)
         return redirect('organization_dashboard')
-    return render(request, 'authenticate/signupOrgnanization.html', {'form': form})
+    return render(request, 'authenticate/signupOrgnanization.html', {'logisticPartner': logisticPartner})
+
 
 def signupLogisticPartner(request):
     user_type = UserTypes.objects.filter(name='Logistics').first()
@@ -179,7 +193,7 @@ def user_login(request):
         if organization:
             return redirect('organization_dashboard')
         elif donor:
-            return redirect('organization_dashboard')  # Fixed typo: should redirect to donor_dashboard
+            return redirect('donation_dashboard')  # Fixed typo: should redirect to donor_dashboard
         elif logistic:
             return redirect('logistic_dashboard')
 
