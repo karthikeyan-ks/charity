@@ -27,6 +27,18 @@ class Donor(models.Model):
     def __str__(self):
         return self.user.email
     
+class LogisticPartner(models.Model):
+    lid = models.AutoField(primary_key=True)
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="user_logistic")
+    license = models.CharField(max_length=100)
+    address = models.TextField()
+    pincode = models.CharField(max_length=6)
+    noe = models.IntegerField(default=1)#number of employee
+    available_employee = models.IntegerField(default=1)
+    
+    def __str__(self):
+        return self.user.username
+    
 
 class Organization(models.Model):
     oid = models.AutoField(primary_key=True)

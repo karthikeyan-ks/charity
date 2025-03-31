@@ -27,6 +27,8 @@ class RequestResource(models.Model):
     pic = models.ImageField(upload_to="organization/",blank=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
+    pick_up_available = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.name
     

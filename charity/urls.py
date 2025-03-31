@@ -11,7 +11,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('auth_app.urls')),
     path('organization/',include('Organization.urls')),
-    path('donations/',include('donations.urls'))
+    path('donations/',include('donations.urls')),
+    path('logistics/',include('logistics.urls'))
 ]
 
 if settings.DEBUG:
