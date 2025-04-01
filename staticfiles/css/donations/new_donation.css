@@ -1,0 +1,15 @@
+.note {
+    background-color: #f8d7da; /* Light red background for emphasis */
+    color: #721c24; /* Dark red text color */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #f5c6cb; /* Border that matches the background color */
+    font-size: 0.8rem;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.note p {
+    margin: 0;
+    font-weight: 500;
+}
