@@ -9,6 +9,6 @@ admin.site.register(LogisticPartner)
 
 admin.site.site_header = "CharityLink Admin Panel"
 admin.site.site_title = "My Site Admin"
-admin.site.index_title = "Welcome to My Admin Panel"
+admin.site.index_title = "Welcome to CharityLink Admin Panel"
 
 # Register your models here.

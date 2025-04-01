@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     user_type = models.ForeignKey(UserTypes,on_delete=models.CASCADE,related_name="user_type",default=3)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    is_verified = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username

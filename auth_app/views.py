@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
 from .models import CustomUser,UserTypes,Donor,Organization,LogisticPartner
+from django.contrib.auth.decorators import login_required
+from .forms import UserProfileForm
 
 def home(request):
     return render(request,'home.html')
@@ -90,8 +92,10 @@ def signupOrganization(request):
             profile_picture = profile_picture,
             phone_number = phone,
             user_type = user_type,
+            is_verified = False
+            
         )
-        user.set_password(password1)    
+        user.set_password(password1) 
         user.save()
         messages.success(request,"New Account is created for you")
         organization = Organization(
@@ -124,6 +128,7 @@ def signupOrganization(request):
 
 def signupLogisticPartner(request):
     user_type = UserTypes.objects.filter(name='Logistics').first()
+   
     if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
@@ -174,15 +179,22 @@ def signupLogisticPartner(request):
     return render(request,'authenticate/signupLogisticPartner.html')
 
 def user_login(request):
+    print("Logging in...")
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
         remember = request.POST.get('remember')
+        
         user = authenticate(request=request,username=username,password=password)
         print(username,password,user,remember)
         if user is None :
             messages.error(request,'invalid username or password')
             return redirect('auth_login')
+        if not user.is_verified:
+            return render(request,'authenticate/approval.html')
+        
+       
+        
         messages.success(request,"Authenticated successfully")
         if remember:
             login(request,user)
@@ -210,3 +222,21 @@ def user_logout(request):
     return redirect("home")
 
 # Create your views here.
+
+
+@login_required
+def edit_profile(request):
+    user = request.user  # Get the logged-in user
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to profile view
+    else:
+        form = UserProfileForm(instance=user)
+
+    return render(request, 'authenticate/edit_profile.html', {'form': form})
+
+@login_required
+def profile(request):
+    return render(request, 'authenticate/profile.html', {'user': request.user})

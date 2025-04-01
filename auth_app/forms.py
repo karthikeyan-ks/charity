@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import CustomUser
 
 class SignupForm(forms.ModelForm):
     USER_TYPE_CHOICES = [
@@ -27,3 +28,15 @@ class SignupForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match!")
 
         return cleaned_data
+
+from django import forms
+from .models import CustomUser
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'phone_number', 'profile_picture', 'is_verified']
+        widgets = {
+            'username': forms.TextInput(attrs={'readonly': 'readonly'}),
+            'email': forms.EmailInput(attrs={'readonly': 'readonly'}),
+        }

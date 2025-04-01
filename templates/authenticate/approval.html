@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/organization/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+{% endblock %}
+{% block title %}Organization Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card text-center shadow-lg" style="max-width: 500px;">
+        <div class="card-body">
+            <!-- Hourglass Icon -->
+            <div class="mb-3">
+                <i class="fas fa-hourglass-half text-warning" style="font-size: 4rem;"></i>
+            </div>
+            <h3 class="card-title text-primary">
+                <i class="fas fa-clipboard-check"></i> Approval Pending
+            </h3>
+            <p class="card-text text-muted">
+                <i class="fas fa-info-circle"></i> Your organization registration is under review.
+                An admin will approve your request soon.
+            </p>
+            <p class="card-text text-muted">
+                <i class="fas fa-bell"></i> You will be notified once the approval process is complete.
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-primary mt-3">
+                <i class="fas fa-home"></i> Go to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
