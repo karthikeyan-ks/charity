@@ -21,7 +21,9 @@
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">Charity Link</a>
             {% if user %}
-            <img src="{{ user.profile_picture.url }}" class="navbar-profile"/>
+            {% if user.profile_picture and user.profile_picture.url %}
+                <img src="{{ user.profile_picture.url }}" class="navbar-profile"/>
+            {% endif %}
             <a class="nav-link text-center" href="{% url 'home' %}">Welcome {{ user.username }}</a>
             {% endif %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
