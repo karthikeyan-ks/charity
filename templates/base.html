@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}My Website{% endblock %}</title>
+    <title>{% block title %}Unite to Uplift{% endblock %}</title>
     
 
     <!-- Bootstrap CSS -->
@@ -19,7 +19,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">Charity Link</a>
+            <a class="navbar-brand" href="{% url 'home' %}">Unite to Uplift</a>
             {% if user %}
             {% if user.profile_picture and user.profile_picture.url %}
                 <img src="{{ user.profile_picture.url }}" class="navbar-profile"/>

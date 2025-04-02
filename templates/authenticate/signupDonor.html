@@ -33,51 +33,53 @@
                 {% csrf_token %}
 
                 <!-- Step 1: Basic Info -->
-                <div id="step1" class="step-content">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
+                            <!-- Step 1: Basic Info -->
+            <div id="step1" class="step-content">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
                 </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+            </div>
 
-                <!-- Step 2: Details -->
-                <div id="step2" class="step-content d-none">
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" name="address">
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" name="phone">
-                    </div>
-                    <div class="mb-3">
-                        <label for="pincode" class="form-label">Pincode</label>
-                        <input type="number" class="form-control" id="pincode" name="pincode">
-                    </div>
+            <!-- Step 2: Details -->
+            <div id="step2" class="step-content d-none">
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" required>
                 </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="mb-3">
+                    <label for="pincode" class="form-label">Pincode</label>
+                    <input type="number" class="form-control" id="pincode" name="pincode" required>
+                </div>
+            </div>
 
-                <!-- Step 3: Profile Picture with Preview -->
-                <div id="step3" class="step-content d-none text-center">
-                    <label for="profile_picture" class="form-label">Profile Picture</label>
-                    <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" onchange="previewImage(event)">
-                    <img id="imagePreview" class="mt-3 rounded-circle" style="display: none; width: 150px; height: 150px; object-fit: cover;" />
-                </div>
+            <!-- Step 3: Profile Picture with Preview -->
+            <div id="step3" class="step-content d-none text-center">
+                <label for="profile_picture" class="form-label">Profile Picture</label>
+                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required onchange="previewImage(event)">
+                <img id="imagePreview" class="mt-3 rounded-circle" style="display: none; width: 150px; height: 150px; object-fit: cover;" />
+            </div>
 
-                <!-- Step 4: Password -->
-                <div id="step4" class="step-content d-none">
-                    <div class="mb-3">
-                        <label for="password1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password1" name="password1" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password2" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="password2" name="password2" required>
-                    </div>
+            <!-- Step 4: Password -->
+            <div id="step4" class="step-content d-none">
+                <div class="mb-3">
+                    <label for="password1" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password1" name="password1" required>
                 </div>
+                <div class="mb-3">
+                    <label for="password2" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="password2" name="password2" required>
+                </div>
+            </div>
+
 
                 <!-- Navigation Buttons -->
                 <div class="d-flex justify-content-between mt-4">

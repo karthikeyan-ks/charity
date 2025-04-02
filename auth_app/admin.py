@@ -7,8 +7,8 @@ admin.site.register(Donor)
 admin.site.register(Organization)
 admin.site.register(LogisticPartner)
 
-admin.site.site_header = "CharityLink Admin Panel"
+admin.site.site_header = "Unite to Uplift "
 admin.site.site_title = "My Site Admin"
-admin.site.index_title = "Welcome to CharityLink Admin Panel"
+admin.site.index_title = "Welcome to Admin Panel"
 
 # Register your models here.

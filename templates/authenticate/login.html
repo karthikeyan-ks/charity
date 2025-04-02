@@ -14,8 +14,43 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <style>
+        /* Snackbar Styles */
+        .snackbar {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .snackbar.show {
+            visibility: visible;
+            bottom: 50px;
+            opacity: 1;
+        }
+
+        /* Snackbar Colors */
+        .snackbar.success { background-color: #28a745; } /* Green */
+        .snackbar.error { background-color: #dc3545; } /* Red */
+        .snackbar.warning { background-color: #ffc107; } /* Yellow */
+        .snackbar.info { background-color: #17a2b8; } /* Blue */
+    </style>
 </head>
 <body class="light-mode">
+
+    <!-- Snackbar Container -->
+    <div id="snackbar" class="snackbar"></div>
 
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="card shadow-lg p-4 rounded-4 login-container">
@@ -29,9 +64,7 @@
                 <div class="col-md-6 d-flex flex-column justify-content-center p-4">
                     <div class="d-flex justify-content-between align-items-center w-100 mb-5">
                         <h3 class="mb-0">Login to Charity Link</h3>
-                        <button class="btn btn-outline-dark" id="theme-toggle">
-                            🌙
-                        </button>
+                        <button class="btn btn-outline-dark" id="theme-toggle">🌙</button>
                     </div>                    
                     <form method="POST">
                         {% csrf_token %}
@@ -51,9 +84,9 @@
                                 <input type="checkbox" id="remember" name="remember" class="form-check-input">
                                 <label for="remember" class="form-check-label">Remember me</label>
                             </div>
-                            <a href="{% url 'password_reset' %}" class="text-center text-decoration-none mt-3"> forgot Password</a>
+                            <a href="{% url 'password_reset' %}" class="text-center text-decoration-none mt-3">Forgot Password</a>
                         </div>
-                        <div class="d-flex w-100 justify-content-center align-items-center ">
+                        <div class="d-flex w-100 justify-content-center align-items-center">
                             <button type="submit" class="btn btn-primary w-auto mt-3 text-center">Login</button>
                         </div>
                     </form>
@@ -69,7 +102,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-center">
-                                    <p>Are you signing up as a Donor , an Organization or a Logistic Partner?</p>
+                                    <p>Are you signing up as a Donor, an Organization, or a Logistic Partner?</p>
                                     <a href="{% url 'auth_signup_donor' %}" class="btn btn-success">Donor</a>
                                     <a href="{% url 'auth_signup_organization' %}" class="btn btn-info">Organization</a>
                                     <a href="{% url 'auth_signup_logistic' %}" class="btn btn-info">Logistic Partner</a>
@@ -78,9 +111,7 @@
                         </div>
                     </div>
 
-                    <!-- Dark Mode Toggle -->
-                    
-                    <a href="{% url 'home' %}" class="text-center text-decoration-none mt-3"> back to Home</a>
+                    <a href="{% url 'home' %}" class="text-center text-decoration-none mt-3">Back to Home</a>
                 </div>
             </div>
         </div>
@@ -88,6 +119,25 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Snackbar Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const snackbar = document.getElementById("snackbar");
+            
+            {% if messages %}
+                {% for message in messages %}
+                    setTimeout(function () {
+                        snackbar.textContent = "{{ message }}";
+                        snackbar.className = "snackbar show {% if message.tags %}{{ message.tags }}{% endif %}";
+                        setTimeout(function () {
+                            snackbar.className = snackbar.className.replace("show", "");
+                        }, 3000);
+                    }, 500);
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
 
     <!-- Dark Mode Script -->
     <script>

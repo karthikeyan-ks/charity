@@ -33,77 +33,76 @@
                 {% csrf_token %}
 
                 <!-- Step 1: Basic Info -->
-                <div id="step1" class="step-content">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
+                            <!-- Step 1: Basic Details -->
+            <div id="step1" class="step-content">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+            </div>
+
+            <!-- Step 2: Details -->
+            <div id="step2" class="step-content d-none">
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="mb-3">
+                    <label for="pincode" class="form-label">Pincode</label>
+                    <input type="number" class="form-control" id="pincode" name="pincode" required>
+                </div>
+                <div class="mb-3">
+                    <label for="license" class="form-label">License</label>
+                    <input type="text" class="form-control" id="license" name="license" required>
                 </div>
 
-                <!-- Step 2: Details -->
-                <div id="step2" class="step-content d-none">
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" name="address">
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" name="phone">
-                    </div>
-                    <div class="mb-3">
-                        <label for="pincode" class="form-label">Pincode</label>
-                        <input type="number" class="form-control" id="pincode" name="pincode">
-                    </div>
-                    <div class="mb-3">
-                        <label for="license" class="form-label">License</label>
-                        <input type="text" class="form-control" id="license" name="license">
-                    </div>
+                <!-- Checkbox for Pickup Availability -->
+                <div class="mb-3">
+                    <label class="form-check-label" for="pickup">
+                        <input type="checkbox" class="form-check-input" id="pickup" name="pickup" checked> Is Pickup Availability?
+                    </label>
+                </div>
 
-                    <!-- Checkbox for Pickup Availability (Checked by Default) -->
-                    <div class="mb-3">
-                        <label class="form-check-label" for="pickup">
-                            <input type="checkbox" class="form-check-input" id="pickup" name="pickup" checked> Is Pickup Availability?
-                        </label>
-                    </div>
-
-                    <!-- Select dropdown that appears only if "Is Pickup Availability?" is unchecked -->
-                    <div class="mb-3" id="pickup-location-select" style="display: none;">
-                        <label for="pickup-location" class="form-label">Select Pickup Location</label>
-                        <select class="form-control" id="pickup-location" name="pickup_partner" required>
-                            {% if logisticPartner %}
+                <!-- Select dropdown for Pickup Location (Initially Hidden) -->
+                <div class="mb-3" id="pickup-location-select" style="display: none;">
+                    <label for="pickup-location" class="form-label">Select Pickup Location</label>
+                    <select class="form-control" id="pickup-location" name="pickup_partner" required>
+                        {% if logisticPartner %}
                             {% for partner in logisticPartner %}
                                 <option value="{{ partner.lid }}">{{partner.user.username}}</option>
-
                             {% endfor %}
-                            
-                            {% else %}
-                            {% endif %}
-                        </select>
-                    </div>
+                        {% else %}
+                        {% endif %}
+                    </select>
                 </div>
+            </div>
 
-                <!-- Step 3: Profile Picture with Preview -->
-                <div id="step3" class="step-content d-none text-center">
-                    <label for="profile_picture" class="form-label">Profile Picture</label>
-                    <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" onchange="previewImage(event)">
-                    <img id="imagePreview" class="mt-3 rounded-circle" style="display: none; width: 150px; height: 150px; object-fit: cover;" />
-                </div>
+            <!-- Step 3: Profile Picture -->
+            <div id="step3" class="step-content d-none text-center">
+                <label for="profile_picture" class="form-label">Profile Picture</label>
+                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required>
+            </div>
 
-                <!-- Step 4: Password -->
-                <div id="step4" class="step-content d-none">
-                    <div class="mb-3">
-                        <label for="password1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password1" name="password1" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password2" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="password2" name="password2" required>
-                    </div>
+            <!-- Step 4: Password -->
+            <div id="step4" class="step-content d-none">
+                <div class="mb-3">
+                    <label for="password1" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password1" name="password1" required>
                 </div>
+                <div class="mb-3">
+                    <label for="password2" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="password2" name="password2" required>
+                </div>
+            </div>
+
 
                 <!-- Navigation Buttons -->
                 <div class="d-flex justify-content-between mt-4">
@@ -132,6 +131,25 @@
 <script>
     var pickupCheckbox = document.getElementById("pickup");
     var pickupLocationSelect = document.getElementById("pickup-location-select");
+    const pickupCheckbox = document.getElementById("pickup");
+    const pickupLocationSelect = document.getElementById("pickup-location-select");
+    const pickupLocationDropdown = document.getElementById("pickup-location");
+
+    function togglePickupLocation() {
+        if (pickupCheckbox.checked) {
+            pickupLocationSelect.style.display = "none";
+            pickupLocationDropdown.removeAttribute("required");
+        } else {
+            pickupLocationSelect.style.display = "block";
+            pickupLocationDropdown.setAttribute("required", "true");
+        }
+    }
+
+    // Initial check on page load
+    togglePickupLocation();
+
+    // Add event listener
+    pickupCheckbox.addEventListener("change", togglePickupLocation);
 
     // Function to toggle the visibility of the select tag based on checkbox state
     pickupCheckbox.addEventListener("change", function() {

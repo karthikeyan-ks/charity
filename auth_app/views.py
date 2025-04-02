@@ -20,6 +20,10 @@ def signupDonor(request):
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
         profile_picture = request.FILES.get("profile_picture")
+        if not all([username, email, address, pin, phone,  password1, password2]):
+            messages.error(request, 'Fill all credentials.')
+            return redirect('auth_signup_organization')
+
         
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
@@ -74,6 +78,10 @@ def signupOrganization(request):
         profile_picture = request.FILES.get("profile_picture")
         pickup = request.POST.get("pickup")
         pickup_partner =request.POST.get("pickup_partner")
+        if not all([username, email, address, pin, phone, license, password1, password2]):
+            messages.error(request, 'Fill all credentials.')
+            return redirect('auth_signup_organization')
+
         print(pickup_partner,pickup)
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
@@ -140,6 +148,10 @@ def signupLogisticPartner(request):
         password2 = request.POST.get("password2")
         noe = request.POST.get('noe')
         profile_picture = request.FILES.get("profile_picture")
+        if not all([username, email, address, pin, phone, license, password1, password2]):
+            messages.error(request, 'Fill all credentials.')
+            return redirect('auth_signup_organization')
+
         
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
