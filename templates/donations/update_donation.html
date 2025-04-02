@@ -18,12 +18,14 @@
         <div class="mb-3">
             <label for="resource" class="form-label">Select Resource</label>
             <select class="form-control" id="resource" name="resource" required>
-                <option value="" disabled selected>Choose a resource</option>
+                <option value="" disabled>Choose a resource</option>
                 {% for resource in resources %}
-                <option value="{{ resource.rid }}" {% if req.resource.rid == resource.rid %} selected {% endif %}>{{ resource.name }} </option>
+                <option value="{{ resource.rid }}" {% if req.resource.rid == resource.rid %} selected {% endif %}>
+                    {{ resource.name }}
+                </option>
                 {% endfor %}
             </select>
-        </div>
+        </div>        
         <div class="mb-3">
             <label for="quantity" class="form-label">Quantity</label>
             <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="{{req.quantity}}" required>
@@ -40,7 +42,7 @@
             
             <input type="file" class="form-control" id="pic" name="pic">
         </div>        
-        <button type="submit" class="btn btn-primary">Update Request</button>
+        <button type="submit" class="btn btn-primary">Update Donation</button>
     </form>
 </div>
 {% endblock %}

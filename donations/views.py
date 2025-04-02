@@ -142,9 +142,39 @@ def donation_delete(request,did):
     donation.save()
     return redirect('donation_dashboard')
 
+def donation_update(request, did):
+    # Fetch the donation request by ID
+    donation = get_object_or_404(Donations, rid=did)
+    print(did)
 
-def donation_update(request,did):
-    return redirect('donation_dashboard')
+    if request.method == "POST":
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        resource_id = request.POST.get("resource")
+        quantity = request.POST.get("quantity")
+        pic = request.FILES.get("pic")
+
+        # Ensure required fields are present
+        if not all([name, description, resource_id, quantity]):
+            messages.error(request, "All fields are required.")
+            return redirect("donation_update", did=did)
+
+        # Update fields
+        donation.name = name
+        donation.description = description
+        donation.resource = get_object_or_404(Resource, rid=resource_id)
+        donation.quantity = int(quantity)
+        
+        # Update image if a new one is uploaded
+        
+        donation.save()
+        messages.success(request, "Donation request updated successfully.")
+        return redirect("donation_dashboard")  # Redirect to the donation dashboard
+
+    # If GET request, render the update form
+    resources = Resource.objects.all()
+    print(resources)
+    return render(request, "donations/update_donation.html", {"req": donation, "resources": resources})
 
 @login_required
 def similar_donation(request,id):

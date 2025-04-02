@@ -1,5 +1,5 @@
 from django.urls import path  
-from .views import Dashboard,newDonation,searchRequest,donation_success,donation_delete,donation_update,similar_donation,acceptDonation,updateDonation
+from .views import Dashboard,newDonation,searchRequest,donation_success,donation_delete,donation_update,similar_donation,acceptDonation,donation_update
 
 urlpatterns = [
     path("dashboard/",Dashboard,name="donation_dashboard"),
@@ -10,5 +10,5 @@ urlpatterns = [
     path('donation-update/<int:did>/',donation_update,name="donation_update"),
     path('similar-donations/<int:id>',similar_donation,name="similar_donations"),
     path('accept-donation/<int:did>/',acceptDonation,name="accept_donation"),
-    path('update-donation/<int:did>',updateDonation,name="update_donation")
+    path('update-donation/<int:did>',donation_update,name="update_donation")
 ]
