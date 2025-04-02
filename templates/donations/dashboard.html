@@ -72,11 +72,11 @@
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ request.rid }}" data-bs-toggle="tooltip" title="Delete">
                             <i class="bi bi-trash"></i>
                         </button>
-                        <a href="{% url 'request_update' request.rid %}" class="btn btn-warning" data-bs-toggle="tooltip" title="Update">
+                        <a href="{% url 'update_donation' request.rid %}" class="btn btn-warning" data-bs-toggle="tooltip" title="Update">
                             <i class="bi bi-pencil"></i>
                         </a>
                     {% else %}
-                    <a href="" class="btn btn-primary" data-bs-toggle="tooltip" title="See status">
+                    <a href="{% url 'logistic_status' request.donated_to.rid%}" class="btn btn-primary" data-bs-toggle="tooltip" title="See status">
                         <i class="bi bi-eye"></i>
                     </a>
                     {% endif %}

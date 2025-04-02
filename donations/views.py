@@ -166,26 +166,36 @@ def acceptDonation(request, did):
     # Get the donor based on the 'created_by' user in the donation
     donor = get_object_or_404(Donor, user=donation.created_by)
     
+    
     # Create a new RequestResource based on the donation
     req = RequestResource.objects.create(
         name=donation.name,
         created_by=organization,
         quantity=donation.quantity,
-        active=False,
+        active=True,
         logistic_partner=organization.logisticPartner,  # Corrected to 'logistic_partner'
         donated=donor,
         description=donation.description,
         resource=donation.resource
     )
+    donation.donated_to = req
+    donation.save()
     
     # Create a new DeliveryRequest linked to the created RequestResource
-    DeliveryRequest.objects.create(
+    deliver = DeliveryRequest.objects.create(
         logistic_partner=organization.logisticPartner,
         delivered_by=donor.user,
         delivered_to=organization.user,
         donation=donation,
         request=req,
     )
+    print(deliver)
     
     # After processing, redirect the user to a page (either the similar donation page or dashboard)
     return redirect('organization_dashboard')  #
+
+def updateDonation(request,did):
+    donation = Donations.objects.filter(rid = did).first()
+    return render(request,'donations/update_donation.html',{
+        'req':donation
+    })

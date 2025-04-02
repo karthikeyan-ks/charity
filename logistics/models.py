@@ -15,4 +15,4 @@ class DeliveryRequest(models.Model):
     finished = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.logistic_partner.user.username
+        return f"{self.logistic_partner.user.username}({self.did})"

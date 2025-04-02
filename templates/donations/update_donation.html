@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}new Resource Request{% endblock title %}
+{% block content %}
+<div class="col-6 mt-4">
+    <h2 class="mb-4">Update request ({{ req.name }}:{{req.rid}})</h2>
+    
+    <form method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Request Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ req.name }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"  required>{{ req.description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="resource" class="form-label">Select Resource</label>
+            <select class="form-control" id="resource" name="resource" required>
+                <option value="" disabled selected>Choose a resource</option>
+                {% for resource in resources %}
+                <option value="{{ resource.rid }}" {% if req.resource.rid == resource.rid %} selected {% endif %}>{{ resource.name }} </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="{{req.quantity}}" required>
+        </div>
+        <div class="mb-3">
+            <label for="pic" class="form-label">Upload Image</label>
+            
+            <!-- Show existing image if available -->
+            {% if req.pic %}
+                <div class="mb-2">
+                    <img src="{{ req.pic.url }}" alt="Current Image" class="img-thumbnail" width="150">
+                </div>
+            {% endif %}
+            
+            <input type="file" class="form-control" id="pic" name="pic">
+        </div>        
+        <button type="submit" class="btn btn-primary">Update Request</button>
+    </form>
+</div>
+{% endblock %}
+

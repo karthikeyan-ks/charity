@@ -49,6 +49,7 @@ def logisticDashboard(request):
 def status(request,did):
     req = RequestResource.objects.filter(rid = did).first()
     delivery_request = DeliveryRequest.objects.filter(request=req).first()
+    
     print(req,delivery_request)
     return render(request,'Organization/status.html',{
         'request':delivery_request

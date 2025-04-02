@@ -18,7 +18,7 @@
                     <tr>
                         <td>{{ d.resource }}</td>
                         <td>{{ d.quantity }}</td>
-                        <td>{{ d.donated_by.username }}</td>
+                        <td>{{ d.created_by.username }}</td>
                         <td>
                             {% if d.rid %}
                                 <form action="{% url 'accept_donation' d.rid %}" method="post">
