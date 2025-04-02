@@ -28,7 +28,7 @@ def signupDonor(request):
         
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
-            redirect('auth_signup_donor')
+            return redirect('auth_signup_donor')
         if not re.search(r'[0-9]', password1):
             messages.error(request, 'Password must contain at least one number.')
             return redirect('auth_signup_donor')
@@ -97,7 +97,7 @@ def signupOrganization(request):
         print(pickup_partner,pickup)
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
-            redirect('auth_signup_organization')
+            return redirect('auth_signup_organization')
         if not re.search(r'[0-9]', password1):
             messages.error(request, 'Password must contain at least one number.')
             return redirect('auth_signup_organization')
@@ -178,7 +178,7 @@ def signupLogisticPartner(request):
         
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
-            redirect('auth_signup_logistic')
+            return redirect('auth_signup_logistic')
             
         if not re.search(r'[0-9]', password1):
             messages.error(request, 'Password must contain at least one number.')
