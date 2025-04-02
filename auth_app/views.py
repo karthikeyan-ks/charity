@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import CustomUser,UserTypes,Donor,Organization,LogisticPartner
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
+import re
 
 def home(request):
     return render(request,'home.html')
@@ -22,12 +23,23 @@ def signupDonor(request):
         profile_picture = request.FILES.get("profile_picture")
         if not all([username, email, address, pin, phone,  password1, password2]):
             messages.error(request, 'Fill all credentials.')
-            return redirect('auth_signup_organization')
+            return redirect('auth_signup_donor')
 
         
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
             redirect('auth_signup_donor')
+        if not re.search(r'[0-9]', password1):
+            messages.error(request, 'Password must contain at least one number.')
+            return redirect('auth_signup_donor')
+        
+        if not re.search(r'[!@#$%^&*]', password1):
+            messages.error(request, 'Password must contain at least one special character (!@#$%^&*)')
+            return redirect('auth_signup_donor')
+            
+        if len(password1) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+            return redirect('auth_signup_donor')
         
         if CustomUser.objects.filter(username=username).exists():
             messages.error(request,'Account with same username is already exists')
@@ -86,6 +98,17 @@ def signupOrganization(request):
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
             redirect('auth_signup_organization')
+        if not re.search(r'[0-9]', password1):
+            messages.error(request, 'Password must contain at least one number.')
+            return redirect('auth_signup_organization')
+        
+        if not re.search(r'[!@#$%^&*]', password1):
+            messages.error(request, 'Password must contain at least one special character (!@#$%^&*)')
+            return redirect('auth_signup_organization')
+            
+        if len(password1) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+            return redirect('auth_signup_organization')
         
         if CustomUser.objects.filter(username=username).exists():
             messages.error(request,'Account with same username is already exists')
@@ -150,19 +173,31 @@ def signupLogisticPartner(request):
         profile_picture = request.FILES.get("profile_picture")
         if not all([username, email, address, pin, phone, license, password1, password2]):
             messages.error(request, 'Fill all credentials.')
-            return redirect('auth_signup_organization')
+            return redirect('auth_signup_logistic')
 
         
         if password1 != password2:
             messages.error(request,"Passwords didn't match")
-            redirect('auth_signup_organization')
+            redirect('auth_signup_logistic')
+            
+        if not re.search(r'[0-9]', password1):
+            messages.error(request, 'Password must contain at least one number.')
+            return redirect('auth_signup_logistic')
+        
+        if not re.search(r'[!@#$%^&*]', password1):
+            messages.error(request, 'Password must contain at least one special character (!@#$%^&*)')
+            return redirect('auth_signup_logistic')
+            
+        if len(password1) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+            return redirect('auth_signup_logistic')
         
         if CustomUser.objects.filter(username=username).exists():
             messages.error(request,'Account with same username is already exists')
         
         if CustomUser.objects.filter(email=email).exists():
             messages.error(request, "Email is already registered!")
-            return redirect("auth_signup_organization")
+            return redirect("auth_signup_logistic")
         user = CustomUser(
             username = username,
             email = email,
